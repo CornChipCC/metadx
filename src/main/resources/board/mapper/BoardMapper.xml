@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.ktds.metadx.board.mapper.BoardMapper">
+    <select id="getList" resultMap="boardMap">
+      select b.bno, b.btitle title, b.isfile isFiles, b.breg_date regDate, m.mname
+      from board b
+      left join member m
+      on b.email = m.email
+      where bno > 0
+      order by bno desc
+      limit #{skip},#{size}
+    </select>
+    
+    <select id="getListCount" resultType="int">
+      select count(bno)
+      from board
+    </select>
+
+    <select id="getPost" resultMap="boardMap">
+      select b.bno, b.btitle title, b.bcontent content,
+        b.breg_date regDate, b.bupt_date modDate,
+        b.isfile isFiles, m.mname, m.email
+      from board b
+      left join member m
+      on b.email = m.email
+      where bno = #{bno}
+    </select>
+
+    <resultMap id="boardMap" type="com.ktds.metadx.board.dto.BoardDTO">
+      <id property="bno" column="bno"/>
+      <result property="title" column="title"/>
+      <result property="content" column="content"/>
+      <result property="regDate" column="regDate"/>
+      <result property="modDate" column="modDate"/>
+      <result property="isFiles" column="isFiles"/>
+      <collection property="member" ofType="com.ktds.metadx.member.dto.MemberDTO">
+        <result property="mname" column="mname"/>
+        <result property="email" column="email"/>
+      </collection>
+    </resultMap>
+
+    <delete id="delPost">
+      delete
+      from board
+      where bno = #{bno}
+    </delete>
+
+    <insert id="insertPost">
+      <selectKey keyColumn="bno" keyProperty="bno" resultType="java.lang.Long" order="AFTER">
+        select last_insert_ID() as bno
+      </selectKey>
+      insert into board (btitle, bcontent, breg_date, email, isfile)
+        values (#{title}, #{content}, now(), #{member.email}, #{isFiles})
+    </insert>
+
+    <update id="updatePost">
+      update board
+      set btitle = #{title}, bcontent = #{content}, bupt_date = now()
+      where bno = #{bno}
+    </update>
+  </mapper>

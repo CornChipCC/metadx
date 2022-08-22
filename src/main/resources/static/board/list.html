@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Tables - SB Admin</title>
+    </head>
+    <body>
+        <header class="header text-light"></header>
+        <div class="container px-4">
+            <h1 class="mt-4">MetaDx</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr class="thead">
+                                <th class="col-1">번호</th>
+                                <th class="col-7">제목</th>
+                                <th class="col-2">작성자</th>
+                                <th class="col-2">작성일자</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="mt-3 mb-3 d-flex justify-content-end">
+                        <a href="register.html" class="btn btn-secondary mainColorBtn">자료등록</a>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <nav class="dataTable-pagination">
+                            <ul class="pageDiv"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <style>
+            .pageDiv {
+                display: flex;
+                margin-right: 1rem;
+                background-color: #fff;
+                color: #484848;
+            }
+
+            .pageDiv div:hover {
+                cursor: pointer;
+                background-color: #22518F;
+                color: #fff;
+            }
+    
+            .pageDiv div {
+                margin-bottom: 2rem;
+                padding: 0.5rem;
+                border: 1px solid #22518F;
+            }
+        </style>
+        <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
+        <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+        <link rel='stylesheet' href='http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'/>
+        
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <script src="../js/header.js"></script>
+        <link href="../css/common.css" rel="stylesheet"/>
+        <script>
+            const getList = async (pageNum) => {
+                const res = await axios.get("/board/list", {params:{page:pageNum}})
+                return res
+            }
+
+            const pageDiv = document.querySelector(".pageDiv")
+            const printList = (pageNum) => {
+
+                const printPages = ({prev, next, start, end, page}) => {
+                    let str = ""
+
+                    if(prev){
+                        str += `<div data-page=${start-1}>이전</div>`
+                    }
+
+                    for(let i = start; i <= end ; i++){
+                        if(i == pageNum) {
+                            str += `<div class="mb-0" id=${i} style="color:white; background:#22518F" data-page=${i}>${i}</div>` 
+                        } else {
+                            str += `<div class="mb-0" id=${i} data-page=${i}>${i}</div>`
+                        }
+                    }
+                    if(next){
+                        str += `<div data-page=${end+1}>다음</div>`
+                    }
+
+                    pageDiv.innerHTML = str
+                }
+                
+                getList(pageNum).then(res => {
+                    const data = res.data
+                    const posts = res.data.dtoList
+                    let postList = [];
+                    posts.forEach(async (post) => {
+                        if(post.isFiles) {
+                            postList.push(
+                                `<tr class="postDetail">
+                                    <td class="postId">${post.bno}</td>
+                                    <td class="postTitle">
+                                        <a href="/board/detail.html" id="${post.bno}">${post.title}</a>
+                                        <img src="../res/fileImg.png" class="isFile" style="height: 0.7rem;" data-isFile="${post.isFiles}"/>
+                                    </td>
+                                    <td class="postWriter">${post.member.mname}</td>
+                                    <td class="postRegDate">${post.regDate}</td>
+                                </tr>`)
+                        } else {
+                            postList.push(
+                                `<tr class="postDetail">
+                                    <td class="postId">${post.bno}</td>
+                                    <td class="postTitle">
+                                        <a href="/board/detail.html" id="${post.bno}">${post.title}</a>
+                                    </td>
+                                    <td class="postWriter">${post.member.mname}</td>
+                                    <td class="postRegDate">${post.regDate}</td>
+                                </tr>`)
+                        }
+                    })
+                    document.querySelector("tbody").innerHTML = postList.join('')
+                    // 목록 출력 끝
+
+                    // 페이지 출력
+                    printPages(data)
+                }) // end then
+            } // end printList
+
+            // js에서 addEventListener는 무조건 파라미터로 이벤트(e)를 받는다.
+            document.querySelector(".pageDiv").addEventListener("click", (e) =>{ 
+                const target = e.target
+                const pageNum = target.getAttribute("data-page")
+
+                if(!pageNum){
+                    return
+                }
+                
+                printList(pageNum)
+
+            }, false)  // false: 캡처링 안 함
+
+            printList(1)
+
+            document.querySelector("tbody").addEventListener("click", (e) =>{ 
+                const target = e.target
+                const bno = target.getAttribute("id")
+
+                if(bno) {
+                    window.sessionStorage.setItem("bno", bno)
+                }
+
+            }, false)  // false: 캡처링 안 함
+        </script>
+    </body>
+</html>

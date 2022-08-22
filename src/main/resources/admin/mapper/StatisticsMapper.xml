@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+  <mapper namespace="com.ktds.metadx.admin.mapper.StatisticsMapper">
+    <select id="getList" resultType="com.ktds.metadx.admin.dto.AdminDTO">
+        SELECT h.pfdno, h.bno, h.email, h.pfdresult, h.pfdreg_date, 
+        CASE 
+          when d.dno then d.dname
+          ELSE '부서 미지정'
+          END AS 'department',
+        CASE 
+          when t.tno then t.tname
+          ELSE '팀 미지정'
+          END AS 'team'
+        FROM pfd h
+        LEFT OUTER JOIN board b 
+        ON h.bno = b.bno
+        LEFT OUTER JOIN department d
+        ON b.dno = d.dno
+        LEFT OUTER JOIN team t
+        ON b.tno = t.tno
+        ORDER BY h.pfdno DESC;
+    </select>
+
+    <select id="getCountDownloads" resultType="com.ktds.metadx.admin.dto.AdminCountDTO">
+        SELECT MONTH(pfdreg_date) no, count(pfdresult) count
+        FROM pfd
+        WHERE pfdresult > 0
+          AND YEAR(pfdreg_date) = YEAR(NOW())
+        GROUP BY MONTH(pfdreg_date);
+    </select>
+
+    <select id="getLockList" resultType="com.ktds.metadx.admin.dto.AdminLockDTO">
+        select * from block
+        order by blockdate desc
+    </select>
+
+    <select id="getDelList" resultType="com.ktds.metadx.admin.dto.AdminDTO">
+        select m.email, m.mname, m.islock,
+        CASE 
+          when d.dno then d.dname
+          ELSE '부서 미지정'
+          END AS 'department',
+        CASE 
+          when t.tno then t.tname
+          ELSE '팀 미지정'
+          END AS 'team'
+        from member m
+        LEFT OUTER JOIN department d
+        ON m.dno = d.dno
+        LEFT OUTER JOIN team t
+        ON m.tno = t.tno;
+    </select>
+
+    <select id="getLockAccount" resultType="com.ktds.metadx.admin.dto.AdminLockDTO">
+        SELECT MAX(l.blno) blno, m.email email, m.islock islock, MAX(l.blockdate) blockdate
+        FROM member m
+        LEFT OUTER JOIN block l
+          ON m.email = l.email
+        WHERE m.islock = 1
+        GROUP BY m.email
+        ORDER BY l.blno DESC;
+    </select>
+    
+    <update id="changeLockAccount">
+        UPDATE member SET islock = 0 WHERE email = #{email};
+    </update>
+
+    <delete id="delAccount">
+        DELETE FROM member WHERE email = #{email};
+    </delete>
+
+    <select id="getCountLocks" resultType="com.ktds.metadx.admin.dto.AdminCountDTO">
+        SELECT MONTH(blockdate) no, COUNT(blockdate) count 
+        FROM block
+        WHERE YEAR(blockdate) = YEAR(NOW())
+        GROUP BY MONTH(blockdate)
+        ORDER BY MONTH(blockdate) DESC;
+    </select>
+
+  </mapper>

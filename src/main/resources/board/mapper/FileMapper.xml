@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.ktds.metadx.board.mapper.FileMapper" >
+    <insert id="insertFile">
+        insert into files(fname, fkey, fuuid, fdatatype, bno) 
+        values (#{fname}, #{fkey}, #{fuuid}, #{fdatatype}, #{bno})
+    </insert>
+
+    <select id="getFileList" resultType="com.ktds.metadx.board.dto.FileDTO">
+        select fno, fname, freg_date, fupt_date, fdatatype, fuuid, bno
+        from files
+        where bno = #{bno}
+        order by fno desc
+    </select>
+
+    <select id="getFileFkey" resultType="String">
+      select fkey
+      from files
+      where fuuid = #{fuuid}
+    </select>
+
+  </mapper>

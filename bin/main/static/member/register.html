@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Register - SB Admin</title>
+</head>
+<style>
+    #loginBtn {
+        color: #22518F;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 mb-5">
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header"><h4 class="text-center font-weight-light my-4">회원가입</h4></div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-floating mb-3">
+                                <label for="inputEmail">이메일 주소</label>
+                                <input class="form-control" id="inputEmail" type="email" placeholder="name@kt.com" />
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary confirmbtn mainColorBtn">인증번호 보내기</button>
+                            </div>
+                            <div class="form-floating mt-3 mb-3">
+                                <label for="epw" id = emconfirmchk>인증번호</label>
+                                <input class="form-control" id="epw"
+                                    type="password" placeholder="인증번호를 입력하세요."/>
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary confirmbtn2 mainColorBtn">인증번호 확인</button>
+                            </div><br>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        <label for="inputPassword">비밀번호</label>
+                                        <input class="form-control" id="inputPassword"
+                                            type="password" placeholder="비밀번호를 입력하세요."/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3 mb-md-0">
+                                        <label for="inputPasswordConfirm">비밀번호 확인</label>
+                                        <input class="form-control" id="inputPasswordConfirm"
+                                            type="password" placeholder="비밀번호를 다시 입력하세요."/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-floating mb-3">
+                                <div class="col">
+                                    <label for="inputname">이름</label>
+                                    <input class="form-control" id="inputname"
+                                        type="name" placeholder="이름을 입력하세요."/>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating mb-3">
+                                        <label for="jno">직&nbsp;&nbsp;&nbsp;&nbsp;급</label>
+                                        <select class="form-control" id="jno" name="jno" style = "width:100">
+                                            <option selected disabled>직급을 선택하세요.</option>
+                                            <option value = "1">M1</option>
+                                            <option value = "2">M2</option>
+                                            <option value = "3">M3</option>
+                                            <option value = "4">M4</option>
+                                            <option value = "5">M5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-floating mb-3">
+                                <div class="col">
+                                    <label for="dno">본부명</label>
+                                    <select class="form-control" id="dno" name="dno" style="width:100">
+                                        <option selected disabled>본부를 선택하세요.</option>
+                                        <option value = "1">경영서비스본부</option>
+                                        <option value = "2">고객서비스본부</option>
+                                        <option value = "3">플랫폼서비스본부</option>
+                                        <option value = "4">인프라서비스본부</option>
+                                        <option value = "5">Enterprise사업본부</option>
+                                        <option value = "6">DX사업본부</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <div class="form-floating mb-3">
+                                        <label for="tno">팀&nbsp;&nbsp;&nbsp;&nbsp;명</label>
+                                        <select class="form-control" id="tno" name="tno" style="width:100">
+                                            <option selected disabled>팀을 선택하세요.</option>
+                                            <option value = "1">team1</option>
+                                            <option value = "2">team2</option>
+                                            <option value = "3">team3</option>
+                                            <option value = "4">team4</option>
+                                            <option value = "5">team5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <button type="button" class="btn btn-secondary mainColorBtn btn-block createBtn" disabled>회원가입 완료</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="login.html" id="loginBtn">로그인으로 돌아가기</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='modal' class='modal fade' tabindex='-1'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'></div>
+                <div class='modal-body text-center' id='modalContent'>
+                    <div class="row mb-3">
+                        <div class="col" id="makeCaptcha"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col" id="captchaBtn"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h6 id="msg"></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class='modal-footer justify-content-center' id='modalBtn'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+    <link rel='stylesheet' href='http://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'/>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="../css/common.css" rel="stylesheet"/>
+    <script>
+        const modal = new bootstrap.Modal(document.querySelector("#modal"))
+
+        // 인증메일 발송
+        document.querySelector(".confirmbtn").addEventListener("click", (event) => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            email = document.querySelector("#inputEmail").value;
+
+            axios.post("/member/mail", email).then(res => {
+                document.querySelector(".modal-header").innerHTML =
+                    `<h6 id='modalTitle'>메일 전송</h6>
+                    <h6><button type='button' class='btn btn-sm' data-dismiss='modal'>X</button></h6>`
+                document.querySelector("#msg").innerHTML = `인증번호가 발송되었습니다.`
+                document.querySelector("#modalBtn").innerHTML =
+                    `<button class="btn btn-secondary mainColorBtn" data-dismiss='modal'>확인</button>`
+                modal.show()
+            })
+        }, false)
+
+        // 메일 인증
+        document.querySelector(".confirmbtn2").addEventListener("click", (event) => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            code = document.querySelector('#epw').value;
+
+            axios.post("/member/mail_chk", code).then(res =>{
+                if(res.data == code){
+                    document.querySelector(".modal-header").innerHTML =
+                        `<h6 id='modalTitle'>인증 완료</h6>
+                        <h6><button type='button' class='btn btn-sm' data-dismiss='modal'>X</button></h6>`
+                    document.querySelector("#msg").innerHTML = `인증이 완료되었습니다.`
+                    document.querySelector("#modalBtn").innerHTML =
+                        `<button class="btn btn-secondary mainColorBtn" data-dismiss='modal'>확인</button>`
+                    modal.show()
+
+                    document.querySelector(".createBtn").removeAttribute("disabled")
+
+                }else{
+                    document.querySelector(".modal-header").innerHTML =
+                        `<h6 id='modalTitle'>인증 실패</h6>
+                        <h6><button type='button' class='btn btn-sm' data-dismiss='modal'>X</button></h6>`
+                    document.querySelector("#msg").innerHTML = `<div class="text-danger">인증에 실패하였습니다.</div>`
+                    document.querySelector("#modalBtn").innerHTML =
+                        `<button class="btn btn-secondary mainColorBtn" data-dismiss='modal'>확인</button>`
+                    modal.show()
+                }
+            })
+            }, false)
+        
+        // 회원가입
+        document.querySelector(".createBtn").addEventListener("click", (event) => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            email = document.querySelector("#inputEmail").value;
+            mpw = document.querySelector("#inputPassword").value;
+            mname = document.querySelector("#inputname").value;
+            dno = document.querySelector("#dno").value;
+            jno = document.querySelector("#jno").value;
+            tno = document.querySelector("#tno").value;
+            console.log(dno)
+
+            if(email && mpw && mname && (dno != "본부를 선택하세요.")
+                && (jno != "직급을 선택하세요.") && (tno != "팀을 선택하세요.")) {
+                const member = {
+                                "email":email,
+                                "mpw":mpw,
+                                "mname":mname,
+                                "dno":dno,
+                                "jno":jno,
+                                "tno":tno
+                            }
+    
+                console.log(member)
+                
+                axios.post("/member/add", member).then(res => {
+                    document.querySelector(".modal-header").innerHTML =
+                        `<h6 id='modalTitle'>회원가입 성공</h6>
+                        <h6><button type='button' class='btn btn-sm' data-dismiss='modal'>X</button></h6>`
+                    document.querySelector("#msg").innerHTML = `<b>회원가입이 완료되었습니다.</b>`
+                    document.querySelector("#modalBtn").innerHTML =
+                        `<a class="btn btn-secondary mainColorBtn" href="/member/login.html">로그인 하기</a>`
+                    modal.show()
+                })
+            } else {
+                document.querySelector(".modal-header").innerHTML =
+                    `<h6 id='modalTitle'>회원가입 실패</h6>
+                    <h6><button type='button' class='btn btn-sm' data-dismiss='modal'>X</button></h6>`
+                document.querySelector("#msg").innerHTML = `<b class="text-danger">입력값들을 확인해주세요.</b>`
+                document.querySelector("#modalBtn").innerHTML =
+                    `<button class="btn btn-secondary mainColorBtn" data-dismiss='modal'>확인</button>`
+                modal.show()
+            }
+
+        }, false)
+    </script>
+</body>
+</html>
